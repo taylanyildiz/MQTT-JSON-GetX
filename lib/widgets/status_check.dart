@@ -2,12 +2,16 @@ import 'package:ake_elevator_similator/controllers/animation_check.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CheckUser extends GetView<AnimationCheck> {
-  const CheckUser({
+class StatusCheck extends GetView<AnimationCheck> {
+  const StatusCheck({
     Key? key,
     required this.onPressed,
+    required this.title,
   }) : super(key: key);
+
   final Function(bool) onPressed;
+
+  final String title;
 
   void _onPressed() {
     AnimationCheck _anim = Get.find();
@@ -23,14 +27,14 @@ class CheckUser extends GetView<AnimationCheck> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          GetBuilder(
-            builder: (AnimationCheck _) => GestureDetector(
-              onTap: () => _onPressed(),
-              child: AnimatedBuilder(
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+      child: GestureDetector(
+        onTap: () => _onPressed(),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GetBuilder(
+              builder: (AnimationCheck _) => AnimatedBuilder(
                 animation: controller,
                 builder: (context, child) {
                   return Container(
@@ -55,16 +59,16 @@ class CheckUser extends GetView<AnimationCheck> {
                 },
               ),
             ),
-          ),
-          SizedBox(width: 5.0),
-          Text(
-            'Have Username Password',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 13.0,
+            SizedBox(width: 5.0),
+            Text(
+              title,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 14.0,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

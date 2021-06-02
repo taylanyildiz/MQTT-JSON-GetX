@@ -86,6 +86,7 @@ class MqttService extends GetxService {
       MqttPublishMessage recMessage = t[0].payload;
       final message =
           MqttPublishPayload.bytesToStringAsString(recMessage.payload.message!);
+      print(message);
     });
   }
 

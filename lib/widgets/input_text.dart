@@ -26,6 +26,7 @@ class InputText extends StatelessWidget {
               child: TextFormField(
                 validator: (input) => input!.isEmpty ? 'Can not be null' : null,
                 controller: textControllers[i],
+                autofocus: true,
                 decoration: InputDecoration(
                   labelText: title,
                   border: OutlineInputBorder(
@@ -47,7 +48,7 @@ class InputText extends StatelessWidget {
         .values
         .toList();
     return Padding(
-      padding: EdgeInsets.fromLTRB(20.0, 200.0, 20.0, 0.0),
+      padding: EdgeInsets.fromLTRB(20.0, 150.0, 20.0, 10.0),
       child: Form(
         key: formKeys,
         child: Column(

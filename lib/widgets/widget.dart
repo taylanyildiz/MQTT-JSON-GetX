@@ -1,2 +1,2 @@
 export 'input_text.dart';
-export 'check_user.dart';
+export 'status_check.dart';
