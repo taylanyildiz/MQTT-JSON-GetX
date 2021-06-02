@@ -1,4 +1,4 @@
-import 'package:ake_elevator_similator/controllers/animation_check.dart';
+import 'package:ake_elevator_similator/controllers/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -26,6 +26,7 @@ class StatusCheck extends GetView<AnimationCheck> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(AnimationCheck());
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: GestureDetector(
