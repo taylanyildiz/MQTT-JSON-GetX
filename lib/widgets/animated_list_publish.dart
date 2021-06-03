@@ -1,4 +1,3 @@
-import 'package:ake_elevator_similator/controllers/animation_listener_controller.dart';
 import 'package:ake_elevator_similator/controllers/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
