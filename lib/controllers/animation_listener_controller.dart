@@ -3,7 +3,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 
 class AnimationListenerController extends GetxController
     with SingleGetTickerProviderMixin {
-  ///
+  /// [AnimationController]
   late AnimationController _controller;
 
   /// Get animationController
@@ -14,6 +14,10 @@ class AnimationListenerController extends GetxController
     _controller.forward();
     await Future.delayed(Duration(milliseconds: 200));
     _controller.reverse();
+  }
+
+  void createAnimation() async{
+    _controller.forward();
   }
 
   @override

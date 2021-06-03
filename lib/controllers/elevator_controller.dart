@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:ake_elevator_similator/constants/mqtt_constant.dart';
 import 'package:ake_elevator_similator/models/model.dart';
 import 'package:ake_elevator_similator/services/mqtt_service.dart';
 import 'package:get/get.dart';
@@ -23,7 +22,6 @@ class ElevatorController extends GetxController {
   void onInit() {
     super.onInit();
     random = Random();
-  
   }
 
   /// Connection Mqtt Server
@@ -32,26 +30,23 @@ class ElevatorController extends GetxController {
     return _mqttService.initializedMqtt();
   }
 
- 
-  
   /// For publish elevator create.
   void createElevator() {
     ElevatorData randomElevator = getRandomElevator();
     topics.add(randomElevator.id);
     elevatorListPublish.add(randomElevator);
     sendElevatorData(elevatorListPublish.length - 1);
-
-    update([0]);
+    update(topics);
   }
 
   void sendElevatorData(int index) async {
     final MqttService _mqttService = Get.find();
     while (true) {
       elevatorListPublish[index] =
-          getRandomElevator(imei: elevatorListPublish[index].id);
+          getRandomElevator(id: elevatorListPublish[index].id);
       _mqttService.publishMqtt(elevatorListPublish[index]);
-      await Future.delayed(Duration(seconds: 5));
       update();
+      await Future.delayed(Duration(seconds: 5));
     }
   }
 
@@ -79,14 +74,14 @@ class ElevatorController extends GetxController {
   void callFloor(int? floor, String? id) {}
 
   ElevatorData getRandomElevator({
-    String? imei,
+    String? id,
     int? floor,
     bool? isMove,
     bool? maintenance,
     bool? status,
   }) {
     return ElevatorData(
-      id: imei ?? (random!.nextInt(99999) + 10000).toString(),
+      id: id ?? (random!.nextInt(99999) + 10000).toString(),
       speed: random!.nextDouble() + random!.nextInt(255) + 100,
       temperature: random!.nextDouble() + random!.nextInt(255) + 100,
       floor: floor ?? 0,

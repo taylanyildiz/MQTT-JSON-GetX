@@ -11,18 +11,21 @@ class AnimatedListPublish extends GetWidget<AnimationListenerController> {
 
   /// Every ElevetorController List have index.
   final int index;
-
+  
+  /// ElevatorController. 
+  final ElevatorController _controller = Get.find();
+  
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      id: index,
+      id: [_controller.topics],
       builder: (ElevatorController _) {
-        controller.runAnimation();
+        controller.createAnimation();
         return AnimatedBuilder(
           animation: controller.animationController,
           builder: (context, child) {
             return Opacity(
-              opacity: Tween<double>(begin: 1.0, end: 1.0)
+              opacity: Tween<double>(begin: 0.0, end: 1.0)
                   .animate(controller.animationController)
                   .value,
               child: child!,

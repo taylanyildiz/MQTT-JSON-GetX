@@ -75,7 +75,7 @@ class ElevatorData {
   /// Parse from Json.
   factory ElevatorData.fromJson(Map<String, dynamic> json) {
     return ElevatorData(
-      id: json['imei'] as String? ?? '',
+      id: json['id'] as String? ?? '',
       speed: json['speed'] as double? ?? 0.0,
       temperature: json['temperature'] as double? ?? 0.0,
       floor: json['floor'] as int? ?? 0,
@@ -88,7 +88,7 @@ class ElevatorData {
 
   /// To Json Format.
   Map<String, dynamic> toJson() => {
-        'imei': id,
+        'id': id,
         'speed': speed,
         'temperature': temperature,
         'floor': floor,

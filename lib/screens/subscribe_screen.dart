@@ -36,7 +36,6 @@ class SubscribeScreen extends GetView<ElevatorController> {
         ],
       ),
       body: GetBuilder(
-        init: ElevatorController(),
         builder: (ElevatorController _) {
           return ListView.builder(
             itemCount: controller.elevatorListSubscribe.length,

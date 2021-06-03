@@ -32,7 +32,6 @@ class PublisScreen extends GetView<ElevatorController> {
             ),
           ),
         ],
-       
       ),
       body: GetBuilder(
         builder: (ElevatorController _) => ListView.builder(
