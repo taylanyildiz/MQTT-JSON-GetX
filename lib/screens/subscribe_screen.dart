@@ -3,8 +3,8 @@ import 'package:ake_elevator_similator/widgets/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ListenScreen extends GetView<ElevatorController> {
-  ListenScreen({
+class SubscribeScreen extends GetView<ElevatorController> {
+  SubscribeScreen({
     Key? key,
   }) : super(key: key);
 
@@ -19,6 +19,7 @@ class ListenScreen extends GetView<ElevatorController> {
         actions: [
           TextButton.icon(
             onPressed: () {
+              controller.disconnectionMqtt();
               Get.back();
             },
             icon: Icon(
@@ -35,9 +36,10 @@ class ListenScreen extends GetView<ElevatorController> {
         ],
       ),
       body: GetBuilder(
+        init: ElevatorController(),
         builder: (ElevatorController _) {
           return ListView.builder(
-            itemCount: controller.elevatorList.length,
+            itemCount: controller.elevatorListSubscribe.length,
             itemBuilder: (context, index) => AnimatedListListener(index: index),
           );
         },

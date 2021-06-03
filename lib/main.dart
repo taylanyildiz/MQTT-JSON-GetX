@@ -9,9 +9,9 @@ import 'screens/screen.dart';
 void main() {
   Get.put(ElevatorController());
   Get.put(MqttService());
+  Get.put(InputController());
   Get.create(() => AnimationCheck());
   Get.create(() => AnimationListenerController());
-  Get.put(InputController());
   runApp(MyApp());
 }
 

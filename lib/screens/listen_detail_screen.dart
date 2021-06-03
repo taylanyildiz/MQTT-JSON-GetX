@@ -30,7 +30,7 @@ class ListenDetailScreen extends GetView<AnimationListenerController> {
           },
           child: Scaffold(
             appBar: AppBar(
-              title: Text('${_.elevatorList[index].id}'),
+              title: Text('${_.elevatorListSubscribe[index].id}'),
               centerTitle: true,
             ),
             body: Stack(
@@ -43,7 +43,7 @@ class ListenDetailScreen extends GetView<AnimationListenerController> {
                     padding: EdgeInsets.symmetric(horizontal: 20.0),
                     child: Container(
                       color: Colors.red,
-                      child: Text('${_.elevatorList[index].status}'),
+                      child: Text('${_.elevatorListSubscribe[index].status}'),
                     ),
                   ),
                 ),

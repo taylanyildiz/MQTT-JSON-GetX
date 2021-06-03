@@ -22,6 +22,10 @@ class WelcomeScreen extends GetView<ElevatorController> {
 
   final InputController inputController = Get.find();
 
+   bool isPublisher = false;
+
+   bool isHaveUser = false;
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -43,11 +47,11 @@ class WelcomeScreen extends GetView<ElevatorController> {
               ),
               StatusCheck(
                 title: "I'm publisher",
-                onPressed: (check) => print(check),
+                onPressed: (check) => isPublisher = check,
               ),
               StatusCheck(
                 title: "I have username-password",
-                onPressed: (check) => print(check),
+                onPressed: (check) => isHaveUser = check,
               ),
             ],
           ),
@@ -56,8 +60,11 @@ class WelcomeScreen extends GetView<ElevatorController> {
             child: Icon(Icons.login),
             foregroundColor: Colors.white,
             backgroundColor: Colors.orange,
-            onPressed: () =>
-                inputController.addedInput(_textControllers, _formKey)),
+            onPressed: () {
+              inputController.addedInput(
+                  _textControllers, _formKey, isPublisher, isHaveUser);
+              FocusScope.of(context).unfocus();
+            }),
       ),
     );
   }

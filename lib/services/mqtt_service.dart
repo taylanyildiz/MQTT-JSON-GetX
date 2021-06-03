@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:ake_elevator_similator/constants/mqtt_constant.dart';
 import 'package:ake_elevator_similator/controllers/controller.dart';
+import 'package:ake_elevator_similator/models/elevator_data.dart';
 import 'package:get/get.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
@@ -40,9 +43,9 @@ class MqttService extends GetxService {
   }
 
   Future<bool> initializedMqtt() async {
-    _client = MqttServerClient(host!, 'taylanyildz')
+    _client = MqttServerClient(MqttConstant.MQTT_HOST_ADRESS, 'taylanyildz')
       ..logging(on: false)
-      ..port = int.parse(port!)
+      ..port = int.parse(MqttConstant.MQTT_PORT_ADRESS)
       ..keepAlivePeriod = 20
       ..onConnected = _onConnected
       ..onDisconnected = _onDisConnected
@@ -87,25 +90,24 @@ class MqttService extends GetxService {
     log('topic = $topic');
   }
 
-  List<String> top = ["903461", "1084069", "314588"];
-
   void listenMqtt() {
-    for (String t in top) {
-      _client.subscribe(topic! + t, MqttQos.atLeastOnce);
-      _client.updates!.listen((dynamic t) {
-        MqttPublishMessage recMessage = t[0].payload;
-        final message = MqttPublishPayload.bytesToStringAsString(
-            recMessage.payload.message!);
-        _elevatorController.listenElevator(message);
-        print(message);
-      });
-    }
+    for (ElevatorData elevatorData in _elevatorController.elevatorListSubscribe)
+      _client.subscribe(
+          MqttConstant.MQTT_TOPIC_KEY + elevatorData.id, MqttQos.atLeastOnce);
+    _client.updates!.listen((dynamic t) {
+      MqttPublishMessage recMessage = t[0].payload;
+      final message =
+          MqttPublishPayload.bytesToStringAsString(recMessage.payload.message!);
+      _elevatorController.listenElevator(message);
+      print(message);
+    });
   }
 
-  void publishMqtt(String? message) {
+  void publishMqtt(ElevatorData? elevatorData) {
     final builder = MqttClientPayloadBuilder();
-    builder.addString(message!);
-    _client.publishMessage(topic!, MqttQos.atLeastOnce, builder.payload!);
+    builder.addString(jsonEncode(elevatorData!.toJson()));
+    _client.publishMessage(MqttConstant.MQTT_TOPIC_KEY + elevatorData.id,
+        MqttQos.atLeastOnce, builder.payload!);
     builder.clear();
   }
 }

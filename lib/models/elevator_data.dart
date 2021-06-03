@@ -45,7 +45,7 @@ class ElevatorData {
   final bool? status;
 
   /// The date the data was sent
-  final DateTime dateTime;
+  final String dateTime;
 
   /// If the data does not change, mqtt should not send
   @override
@@ -82,7 +82,7 @@ class ElevatorData {
       isMove: json['isMove'] as bool? ?? false,
       maintenance: json['maintenance'] as bool? ?? false,
       status: json['status'] as bool? ?? false,
-      dateTime: json['dateTime'] as DateTime? ?? DateTime.now(),
+      dateTime: json['dateTime'] as String? ?? DateTime.now().toString(),
     );
   }
 

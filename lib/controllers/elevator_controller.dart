@@ -1,13 +1,17 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:ake_elevator_similator/constants/mqtt_constant.dart';
 import 'package:ake_elevator_similator/models/model.dart';
 import 'package:ake_elevator_similator/services/mqtt_service.dart';
 import 'package:get/get.dart';
 
 class ElevatorController extends GetxController {
-  /// Get all elevator information.
-  final elevatorList = <ElevatorData>[];
+  /// Get all elevator information. From Subscribe.
+  final elevatorListSubscribe = <ElevatorData>[];
+
+  /// Get all elevator information. From Publish.
+  final elevatorListPublish = <ElevatorData>[];
 
   /// All topics [elevator]/[id]
   final topics = <String>[];
@@ -22,41 +26,39 @@ class ElevatorController extends GetxController {
   }
 
   /// Connection Mqtt Server
-  Future<bool> initializedMqtt(MqttService service) async {
-    return await service.initializedMqtt();
+  Future<bool> initializedMqtt() async {
+    MqttService _mqttService = Get.find();
+
+    return _mqttService.initializedMqtt();
   }
 
   /// For publish elevator create.
   void createElevator() {
     ElevatorData randomElevator = getRandomElevator();
-    elevatorList.add(randomElevator);
-    update();
-  }
-
-  /// For publish elevetor send [publish]
-  void sendElevatorInformation(int index) {
-    /// Getx call [MqttService]
+    topics.add(randomElevator.id);
+    elevatorListPublish.add(randomElevator);
     final MqttService _mqttService = Get.find();
-    while (true) {}
+    _mqttService.publishMqtt(randomElevator);
+    update();
   }
 
   /// For subscribe listen server.
   void listenElevator(String? message) {
     ElevatorData elevatorData = ElevatorData.fromJson(jsonDecode(message!));
-    int index =
-        elevatorList.indexWhere((element) => element.id == elevatorData.id);
+    int index = elevatorListSubscribe
+        .indexWhere((element) => element.id == elevatorData.id);
     if (index == -1) {
-      elevatorList.add(elevatorData);
+      elevatorListSubscribe.add(elevatorData);
       update();
     } else {
-      elevatorList[index] = elevatorData;
+      elevatorListSubscribe[index] = elevatorData;
       update([index]);
     }
   }
 
   /// Disconnection MQTT
   void disconnectionMqtt() {
-    /// Getx call [MqttService]
+    /// MqttService Object from GetX.
     final MqttService _mqttService = Get.find();
     _mqttService.disConnect();
   }
@@ -75,10 +77,10 @@ class ElevatorController extends GetxController {
       speed: random!.nextDouble() + random!.nextInt(255) + 100,
       temperature: random!.nextDouble() + random!.nextInt(255) + 100,
       floor: floor ?? 0,
-      isMove: isMove,
-      maintenance: maintenance,
-      status: status,
-      dateTime: DateTime.now(),
+      isMove: isMove ?? false,
+      maintenance: maintenance ?? true,
+      status: status ?? true,
+      dateTime: DateTime.now().toString(),
     );
   }
 }

@@ -29,7 +29,6 @@ class InputText extends StatelessWidget {
               child: TextFormField(
                 controller: textControllers[i],
                 validator: (input) => input!.isEmpty ? 'Can not be null' : null,
-                autofocus: true,
                 decoration: InputDecoration(
                   labelText: title,
                   border: OutlineInputBorder(

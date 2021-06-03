@@ -47,7 +47,7 @@ class AnimatedListListener extends GetWidget<AnimationListenerController> {
               child: Column(
                 children: [
                   Text(
-                    '${_.elevatorList[index].id}',
+                    '${_.elevatorListSubscribe[index].id}',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20.0,
@@ -55,7 +55,7 @@ class AnimatedListListener extends GetWidget<AnimationListenerController> {
                   ),
                   Row(
                     children: [
-                      Text('${_.elevatorList[index].status}'),
+                      Text('${_.elevatorListSubscribe[index].status}'),
                     ],
                   ),
                 ],

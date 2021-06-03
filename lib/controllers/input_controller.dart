@@ -1,5 +1,6 @@
 import 'package:ake_elevator_similator/constants/mqtt_constant.dart';
 import 'package:ake_elevator_similator/controllers/controller.dart';
+import 'package:ake_elevator_similator/screens/publish_screen.dart';
 import 'package:ake_elevator_similator/screens/subscribe_screen.dart';
 import 'package:ake_elevator_similator/services/mqtt_service.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class InputController extends GetxController {
   final ElevatorController _elevatorController = Get.find();
 
   void addedInput(List<TextEditingController> controller,
-      GlobalKey<FormState> formKey) async {
+      GlobalKey<FormState> formKey, bool isPublisher, bool isHaveUser) async {
     /// Form check empty.
     if (formKey.currentState!.validate()) {
       host = controller[0].text;
@@ -39,24 +40,16 @@ class InputController extends GetxController {
         topic: topic,
       );
 
-      /// Connection Check.
-      bool isConnection = await _elevatorController.initializedMqtt(service);
 
-      /// If Connected
-      if (isConnection) {
-        Get.to(() => ListenScreen());
-      }
 
-      /// If Connected failed.
-      else {}
+      
     } else {
-      service = MqttService(
-        host: MqttConstant.MQTT_HOST_ADRESS,
-        port: MqttConstant.MQTT_PORT_ADRESS,
-        topic: MqttConstant.MQTT_TOPIC_KEY,
-      );
-      await _elevatorController.initializedMqtt(service);
-      Get.to(() => ListenScreen());
+     
+        _elevatorController.initializedMqtt();
+      if (!isPublisher)
+        Get.to(() => SubscribeScreen());
+      else
+        Get.to(() => PublisScreen());
     }
   }
 }
