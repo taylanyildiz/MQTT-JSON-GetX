@@ -23,23 +23,36 @@ class ElevatorController extends GetxController {
   void onInit() {
     super.onInit();
     random = Random();
+  
   }
 
   /// Connection Mqtt Server
   Future<bool> initializedMqtt() async {
     MqttService _mqttService = Get.find();
-
     return _mqttService.initializedMqtt();
   }
 
+ 
+  
   /// For publish elevator create.
   void createElevator() {
     ElevatorData randomElevator = getRandomElevator();
     topics.add(randomElevator.id);
     elevatorListPublish.add(randomElevator);
+    sendElevatorData(elevatorListPublish.length - 1);
+
+    update([0]);
+  }
+
+  void sendElevatorData(int index) async {
     final MqttService _mqttService = Get.find();
-    _mqttService.publishMqtt(randomElevator);
-    update();
+    while (true) {
+      elevatorListPublish[index] =
+          getRandomElevator(imei: elevatorListPublish[index].id);
+      _mqttService.publishMqtt(elevatorListPublish[index]);
+      await Future.delayed(Duration(seconds: 5));
+      update();
+    }
   }
 
   /// For subscribe listen server.
@@ -80,7 +93,7 @@ class ElevatorController extends GetxController {
       isMove: isMove ?? false,
       maintenance: maintenance ?? true,
       status: status ?? true,
-      dateTime: DateTime.now().toString(),
+      dateTime: 'now',
     );
   }
 }

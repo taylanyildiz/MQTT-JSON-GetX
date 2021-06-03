@@ -32,7 +32,7 @@ class PublisScreen extends GetView<ElevatorController> {
             ),
           ),
         ],
-        leading: SizedBox.shrink(),
+       
       ),
       body: GetBuilder(
         builder: (ElevatorController _) => ListView.builder(

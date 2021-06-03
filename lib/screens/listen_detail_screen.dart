@@ -1,9 +1,8 @@
-import 'package:ake_elevator_similator/controllers/animation_listener_controller.dart';
 import 'package:ake_elevator_similator/controllers/elevator_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ListenDetailScreen extends GetView<AnimationListenerController> {
+class ListenDetailScreen extends GetView<ElevatorController> {
   const ListenDetailScreen({
     Key? key,
     required this.index,
@@ -14,44 +13,29 @@ class ListenDetailScreen extends GetView<AnimationListenerController> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
-      id: index,
-      builder: (ElevatorController _) {
-        return AnimatedBuilder(
-          animation: controller.animationController,
-          builder: (context, child) {
-            controller.runAnimation();
-            return Opacity(
-              opacity: Tween<double>(begin: 1.0, end: 0.0)
-                  .animate(controller.animationController)
-                  .value,
-              child: child!,
-            );
-          },
-          child: Scaffold(
-            appBar: AppBar(
-              title: Text('${_.elevatorListSubscribe[index].id}'),
-              centerTitle: true,
-            ),
-            body: Stack(
-              children: [
-                Positioned(
-                  top: 20.0,
-                  left: 0.0,
-                  right: 0.0,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Container(
-                      color: Colors.red,
-                      child: Text('${_.elevatorListSubscribe[index].status}'),
-                    ),
-                  ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('${controller.elevatorListSubscribe[index].id}'),
+        centerTitle: true,
+      ),
+      body: GetBuilder(
+        builder:(ElevatorController _)=> Stack(
+          children: [
+            Positioned(
+              top: 20.0,
+              left: 0.0,
+              right: 0.0,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Container(
+                  color: Colors.red,
+                  child: Text('${_.elevatorListSubscribe[index].status}'),
                 ),
-              ],
+              ),
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 }

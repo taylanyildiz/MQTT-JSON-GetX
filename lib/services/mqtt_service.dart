@@ -91,7 +91,7 @@ class MqttService extends GetxService {
   }
 
   void listenMqtt() {
-    for (ElevatorData elevatorData in _elevatorController.elevatorListSubscribe)
+    for (ElevatorData elevatorData in _elevatorController.elevatorListPublish)
       _client.subscribe(
           MqttConstant.MQTT_TOPIC_KEY + elevatorData.id, MqttQos.atLeastOnce);
     _client.updates!.listen((dynamic t) {
