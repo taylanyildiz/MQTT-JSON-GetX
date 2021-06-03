@@ -21,6 +21,11 @@ class ElevatorController extends GetxController {
     random = Random();
   }
 
+  /// Connection Mqtt Server
+  Future<bool> initializedMqtt(MqttService service) async {
+    return await service.initializedMqtt();
+  }
+
   /// For publish elevator create.
   void createElevator() {
     ElevatorData randomElevator = getRandomElevator();
@@ -30,7 +35,8 @@ class ElevatorController extends GetxController {
 
   /// For publish elevetor send [publish]
   void sendElevatorInformation(int index) {
-    MqttService mqttService = Get.find();
+    /// Getx call [MqttService]
+    final MqttService _mqttService = Get.find();
     while (true) {}
   }
 
@@ -46,6 +52,13 @@ class ElevatorController extends GetxController {
       elevatorList[index] = elevatorData;
       update([index]);
     }
+  }
+
+  /// Disconnection MQTT
+  void disconnectionMqtt() {
+    /// Getx call [MqttService]
+    final MqttService _mqttService = Get.find();
+    _mqttService.disConnect();
   }
 
   void callFloor(int? floor, String? id) {}

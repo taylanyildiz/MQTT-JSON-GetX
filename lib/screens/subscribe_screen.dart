@@ -18,7 +18,9 @@ class ListenScreen extends GetView<ElevatorController> {
         backgroundColor: Colors.blue,
         actions: [
           TextButton.icon(
-            onPressed: () => print(''),
+            onPressed: () {
+              Get.back();
+            },
             icon: Icon(
               Icons.logout,
               color: Colors.white,

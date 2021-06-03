@@ -31,6 +31,7 @@ class MqttService extends GetxService {
 
   late MqttServerClient _client;
 
+  /// For list added.Listen and Send data.
   final ElevatorController _elevatorController = Get.find();
 
   @override
@@ -69,7 +70,7 @@ class MqttService extends GetxService {
     try {
       _client.disconnect();
     } catch (e) {
-      log('Diconnection Failed');
+      log(e.toString());
     }
   }
 
