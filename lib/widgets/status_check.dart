@@ -2,7 +2,7 @@ import 'package:ake_elevator_similator/controllers/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class StatusCheck extends GetView<AnimationCheck> {
+class StatusCheck extends GetWidget<AnimationCheck> {
   const StatusCheck({
     Key? key,
     required this.onPressed,
@@ -13,29 +13,27 @@ class StatusCheck extends GetView<AnimationCheck> {
 
   final String title;
 
-  void _onPressed() {
-    AnimationCheck _anim = Get.find();
-    if (_anim.status == AnimationStatus.completed) {
-      _anim.reset();
+  void _onPressed(AnimationCheck anim) {
+    if (anim.status == AnimationStatus.completed) {
+      anim.reset();
       onPressed.call(false);
     } else {
-      _anim.forward();
+      anim.forward();
       onPressed.call(true);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AnimationCheck());
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      child: GestureDetector(
-        onTap: () => _onPressed(),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GetBuilder(
-              builder: (AnimationCheck _) => AnimatedBuilder(
+      child: GetBuilder(
+        builder: (AnimationCheck _) => GestureDetector(
+          onTap: () => _onPressed(controller),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              AnimatedBuilder(
                 animation: controller,
                 builder: (context, child) {
                   return Container(
@@ -59,16 +57,16 @@ class StatusCheck extends GetView<AnimationCheck> {
                   );
                 },
               ),
-            ),
-            SizedBox(width: 5.0),
-            Text(
-              title,
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 14.0,
+              SizedBox(width: 5.0),
+              Text(
+                title,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14.0,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:ake_elevator_similator/controllers/controller.dart';
 import 'package:get/get.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
@@ -30,12 +31,14 @@ class MqttService extends GetxService {
 
   late MqttServerClient _client;
 
+  final ElevatorController _elevatorController = Get.find();
+
   @override
   void onInit() {
     super.onInit();
   }
 
-  Future<void> initializedMqtt() async {
+  Future<bool> initializedMqtt() async {
     _client = MqttServerClient(host!, 'taylanyildz')
       ..logging(on: false)
       ..port = int.parse(port!)
@@ -54,9 +57,11 @@ class MqttService extends GetxService {
     _client.connectionMessage = connMessage;
     try {
       await _client.connect(username, password);
+      return true;
     } catch (e) {
       log(e.toString());
       _client.disconnect();
+      return false;
     }
   }
 
@@ -64,12 +69,13 @@ class MqttService extends GetxService {
     try {
       _client.disconnect();
     } catch (e) {
-      log('Diconnetion Failed');
+      log('Diconnection Failed');
     }
   }
 
   void _onConnected() {
     log('Connected');
+    listenMqtt();
   }
 
   void _onDisConnected() {
@@ -80,19 +86,24 @@ class MqttService extends GetxService {
     log('topic = $topic');
   }
 
+  List<String> top = ["903461", "1084069", "314588"];
+
   void listenMqtt() {
-    _client.subscribe(topic!, MqttQos.atLeastOnce);
-    _client.updates!.listen((dynamic t) {
-      MqttPublishMessage recMessage = t[0].payload;
-      final message =
-          MqttPublishPayload.bytesToStringAsString(recMessage.payload.message!);
-      print(message);
-    });
+    for (String t in top) {
+      _client.subscribe(topic! + t, MqttQos.atLeastOnce);
+      _client.updates!.listen((dynamic t) {
+        MqttPublishMessage recMessage = t[0].payload;
+        final message = MqttPublishPayload.bytesToStringAsString(
+            recMessage.payload.message!);
+        _elevatorController.listenElevator(message);
+        print(message);
+      });
+    }
   }
 
-  void publishMqtt() {
+  void publishMqtt(String? message) {
     final builder = MqttClientPayloadBuilder();
-    builder.addString('val');
+    builder.addString(message!);
     _client.publishMessage(topic!, MqttQos.atLeastOnce, builder.payload!);
     builder.clear();
   }

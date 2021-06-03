@@ -5,14 +5,17 @@ class InputText extends StatelessWidget {
     Key? key,
     required this.formKeys,
     required this.textControllers,
-    required this.titles,
   }) : super(key: key);
 
-  final List<String> titles;
-
-  final List<TextEditingController> textControllers;
+  final titles = <String>[
+    'Host adress',
+    'Port adress',
+    'Topic key',
+  ];
 
   final GlobalKey<FormState> formKeys;
+
+  final List<TextEditingController> textControllers;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +27,8 @@ class InputText extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5.0),
               child: TextFormField(
-                validator: (input) => input!.isEmpty ? 'Can not be null' : null,
                 controller: textControllers[i],
+                validator: (input) => input!.isEmpty ? 'Can not be null' : null,
                 autofocus: true,
                 decoration: InputDecoration(
                   labelText: title,

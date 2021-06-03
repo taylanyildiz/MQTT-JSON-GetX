@@ -3,12 +3,15 @@ import 'package:get/get.dart';
 
 class AnimationCheck extends GetxController with SingleGetTickerProviderMixin {
   late AnimationController _controller;
-  AnimationCheck() {
+
+  @override
+  void onInit() {
     this._controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 400),
     );
     _controller.addListener(_listenerAnimation);
+    super.onInit();
   }
 
   void _listenerAnimation() {
@@ -21,9 +24,11 @@ class AnimationCheck extends GetxController with SingleGetTickerProviderMixin {
 
   AnimationStatus get status => _controller.status;
 
+  AnimationController get animationConroller => _controller;
+
   @override
-  void dispose() {
+  void onClose() {
     _controller.removeListener(_listenerAnimation);
-    super.dispose();
+    super.onClose();
   }
 }
