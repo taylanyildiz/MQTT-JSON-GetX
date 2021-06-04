@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:ake_elevator_similator/models/model.dart';
 import 'package:ake_elevator_similator/services/mqtt_service.dart';
 import 'package:get/get.dart';
@@ -24,10 +23,15 @@ class ElevatorController extends GetxController {
     random = Random();
   }
 
+  @override
+  void onClose() {
+    super.onClose();
+  }
+
   /// Connection Mqtt Server
   Future<bool> initializedMqtt() async {
     MqttService _mqttService = Get.find();
-    return _mqttService.initializedMqtt();
+    return await _mqttService.initializedMqtt();
   }
 
   /// For publish elevator create.
@@ -41,7 +45,7 @@ class ElevatorController extends GetxController {
 
   void sendElevatorData(int index) async {
     final MqttService _mqttService = Get.find();
-    while (true) {
+    while (_mqttService.connectionStatus == MqttConnectionStatus.connected) {
       elevatorListPublish[index] =
           getRandomElevator(id: elevatorListPublish[index].id);
       _mqttService.publishMqtt(elevatorListPublish[index]);
@@ -65,10 +69,11 @@ class ElevatorController extends GetxController {
   }
 
   /// Disconnection MQTT
-  void disconnectionMqtt() {
+  void disconnectionMqtt() async {
     /// MqttService Object from GetX.
     final MqttService _mqttService = Get.find();
-    _mqttService.disConnect();
+    await _mqttService.disConnect();
+    elevatorListPublish.clear();
   }
 
   void callFloor(int? floor, String? id) {}
@@ -88,7 +93,7 @@ class ElevatorController extends GetxController {
       isMove: isMove ?? false,
       maintenance: maintenance ?? true,
       status: status ?? true,
-      dateTime: 'now',
+      dateTime: DateTime.now().toString(),
     );
   }
 }

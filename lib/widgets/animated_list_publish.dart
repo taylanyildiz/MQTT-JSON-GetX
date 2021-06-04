@@ -10,10 +10,10 @@ class AnimatedListPublish extends GetWidget<AnimationListenerController> {
 
   /// Every ElevetorController List have index.
   final int index;
-  
-  /// ElevatorController. 
+
+  /// ElevatorController.
   final ElevatorController _controller = Get.find();
-  
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -27,7 +27,12 @@ class AnimatedListPublish extends GetWidget<AnimationListenerController> {
               opacity: Tween<double>(begin: 0.0, end: 1.0)
                   .animate(controller.animationController)
                   .value,
-              child: child!,
+              child: Transform(
+                alignment: Alignment.bottomCenter,
+                transform: Matrix4.identity()
+                  ..scale(1.0, controller.animationController.value),
+                child: child!,
+              ),
             );
           },
           child: AnimatedContainer(

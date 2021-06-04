@@ -6,5 +6,5 @@ class MqttConstant {
   static const String MQTT_PORT_ADRESS = '1883';
 
   /// Mqtt Topic Key
-  static const String MQTT_TOPIC_KEY = 'Elevator/';
+  static const String MQTT_TOPIC_KEY = 'elevator/';
 }

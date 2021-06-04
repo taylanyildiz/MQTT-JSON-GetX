@@ -8,7 +8,7 @@ class AnimationCheck extends GetxController with SingleGetTickerProviderMixin {
   void onInit() {
     this._controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 400),
+      duration: Duration(milliseconds: 100),
     );
     _controller.addListener(_listenerAnimation);
     super.onInit();
@@ -20,7 +20,7 @@ class AnimationCheck extends GetxController with SingleGetTickerProviderMixin {
 
   void forward() => _controller.forward();
 
-  void reset() => _controller.reset();
+  void reverse() => _controller.reverse();
 
   AnimationStatus get status => _controller.status;
 

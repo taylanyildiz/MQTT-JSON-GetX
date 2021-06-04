@@ -15,7 +15,7 @@ class StatusCheck extends GetWidget<AnimationCheck> {
 
   void _onPressed(AnimationCheck anim) {
     if (anim.status == AnimationStatus.completed) {
-      anim.reset();
+      anim.reverse();
       onPressed.call(false);
     } else {
       anim.forward();
@@ -36,23 +36,29 @@ class StatusCheck extends GetWidget<AnimationCheck> {
               AnimatedBuilder(
                 animation: controller,
                 builder: (context, child) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: controller.status != AnimationStatus.completed
-                          ? Colors.white
-                          : Colors.green,
-                      border: Border.all(
+                  return Transform(
+                    transform: Matrix4.identity()
+                      ..scale(Tween<double>(begin: 1.0, end: 1.2)
+                          .animate(controller.animationConroller)
+                          .value),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
                         color: controller.status != AnimationStatus.completed
-                            ? Colors.black
+                            ? Colors.white
                             : Colors.green,
-                        width: 1.0,
+                        border: Border.all(
+                          color: controller.status != AnimationStatus.completed
+                              ? Colors.black
+                              : Colors.green,
+                          width: 1.0,
+                        ),
                       ),
-                    ),
-                    child: Icon(
-                      Icons.check,
-                      color: Colors.white,
-                      size: 15.0,
+                      child: Icon(
+                        Icons.check,
+                        color: Colors.white,
+                        size: 15.0,
+                      ),
                     ),
                   );
                 },

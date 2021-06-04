@@ -8,6 +8,14 @@ import 'package:get/get.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
+/// Connection Status Mqtt Class
+enum MqttConnectionStatus {
+  connecting,
+  connected,
+  disconnected,
+  noChanged,
+}
+
 class MqttService extends GetxService {
   MqttService({
     this.host,
@@ -32,6 +40,10 @@ class MqttService extends GetxService {
   /// Every subscribe or publish have topic.
   final String? topic;
 
+  /// Mqtt Connection Status
+  late MqttConnectionStatus connectionStatus;
+
+  /// MqttServer Client.
   late MqttServerClient _client;
 
   /// For list added.Listen and Send data.
@@ -60,7 +72,10 @@ class MqttService extends GetxService {
     log('Connecting..');
     _client.connectionMessage = connMessage;
     try {
-      await _client.connect(username, password);
+      await _client.connect(
+        username,
+        password,
+      );
       return true;
     } catch (e) {
       log(e.toString());
@@ -69,7 +84,7 @@ class MqttService extends GetxService {
     }
   }
 
-  Future disConnect() async {
+  Future<void> disConnect() async {
     try {
       _client.disconnect();
     } catch (e) {
@@ -80,10 +95,12 @@ class MqttService extends GetxService {
   void _onConnected() {
     log('Connected');
     listenMqtt();
+    connectionStatus = MqttConnectionStatus.connected;
   }
 
   void _onDisConnected() {
     log('Disconnected');
+    connectionStatus = MqttConnectionStatus.disconnected;
   }
 
   void _onSubscribed(String? topic) {
@@ -91,15 +108,12 @@ class MqttService extends GetxService {
   }
 
   void listenMqtt() {
-    for (ElevatorData elevatorData in _elevatorController.elevatorListPublish)
-      _client.subscribe(
-          MqttConstant.MQTT_TOPIC_KEY + elevatorData.id, MqttQos.atLeastOnce);
+    _client.subscribe(MqttConstant.MQTT_TOPIC_KEY + '+', MqttQos.atLeastOnce);
     _client.updates!.listen((dynamic t) {
       MqttPublishMessage recMessage = t[0].payload;
       final message =
           MqttPublishPayload.bytesToStringAsString(recMessage.payload.message!);
       _elevatorController.listenElevator(message);
-      print(message);
     });
   }
 

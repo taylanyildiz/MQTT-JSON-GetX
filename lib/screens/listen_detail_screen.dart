@@ -1,4 +1,5 @@
 import 'package:ake_elevator_similator/controllers/elevator_controller.dart';
+import 'package:ake_elevator_similator/widgets/animated_list_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,20 +20,9 @@ class ListenDetailScreen extends GetView<ElevatorController> {
         centerTitle: true,
       ),
       body: GetBuilder(
-        builder:(ElevatorController _)=> Stack(
+        builder: (ElevatorController _) => Stack(
           children: [
-            Positioned(
-              top: 20.0,
-              left: 0.0,
-              right: 0.0,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0),
-                child: Container(
-                  color: Colors.red,
-                  child: Text('${_.elevatorListSubscribe[index].status}'),
-                ),
-              ),
-            ),
+            AnimatedListDetail(index: index),
           ],
         ),
       ),

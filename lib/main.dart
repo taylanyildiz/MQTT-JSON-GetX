@@ -10,6 +10,7 @@ void main() {
   Get.put(ElevatorController());
   Get.put(MqttService());
   Get.put(InputController());
+
   Get.create(() => AnimationCheck());
   Get.create(() => AnimationListenerController());
   runApp(MyApp());
