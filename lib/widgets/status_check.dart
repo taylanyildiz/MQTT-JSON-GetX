@@ -37,10 +37,18 @@ class StatusCheck extends GetWidget<AnimationCheck> {
                 animation: controller,
                 builder: (context, child) {
                   return Transform(
+                    alignment: Alignment.center,
                     transform: Matrix4.identity()
-                      ..scale(Tween<double>(begin: 1.0, end: 1.2)
-                          .animate(controller.animationConroller)
-                          .value),
+                      ..scale(
+                        Tween<double>(begin: 1.0, end: 1.2)
+                            .animate(
+                              CurvedAnimation(
+                                parent: controller.animationConroller,
+                                curve: Curves.elasticOut,
+                              ),
+                            )
+                            .value,
+                      ),
                     child: Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,

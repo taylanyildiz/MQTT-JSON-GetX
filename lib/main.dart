@@ -1,4 +1,5 @@
 import 'package:ake_elevator_similator/controllers/animation_listener_controller.dart';
+import 'package:ake_elevator_similator/controllers/console_animation_controller.dart';
 import 'package:ake_elevator_similator/controllers/controller.dart';
 import 'package:ake_elevator_similator/controllers/input_controller.dart';
 import 'package:ake_elevator_similator/services/mqtt_service.dart';
@@ -10,9 +11,9 @@ void main() {
   Get.put(ElevatorController());
   Get.put(MqttService());
   Get.put(InputController());
-
   Get.create(() => AnimationCheck());
   Get.create(() => AnimationListenerController());
+  Get.create(() => ConsoleAnimationController());
   runApp(MyApp());
 }
 

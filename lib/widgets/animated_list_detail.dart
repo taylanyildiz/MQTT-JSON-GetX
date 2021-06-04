@@ -2,7 +2,7 @@ import 'package:ake_elevator_similator/controllers/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AnimatedListDetail extends GetView {
+class AnimatedListDetail extends StatelessWidget {
   AnimatedListDetail({
     Key? key,
     required this.index,
@@ -75,6 +75,18 @@ class AnimatedListDetail extends GetView {
                             fontSize: 16.0,
                             fontWeight: FontWeight.bold,
                           ),
+                        ),
+                        Spacer(),
+                        Icon(
+                          Icons.arrow_upward,
+                          color: Colors.black,
+                          size: 20.0,
+                        ),
+                        SizedBox(width: 5.0),
+                        Icon(
+                          Icons.arrow_downward,
+                          color: Colors.black,
+                          size: 20.0,
                         ),
                       ],
                     ),
@@ -218,6 +230,35 @@ class AnimatedListDetail extends GetView {
                           style: TextStyle(
                             color: Colors.red,
                             fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 5.0),
+                    padding: EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Elevator dateTime :',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(width: 5.0),
+                        Text(
+                          '${_.elevatorListSubscribe[index].dateTime}',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 14.0,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

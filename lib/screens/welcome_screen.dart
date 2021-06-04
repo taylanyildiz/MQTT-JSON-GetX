@@ -8,23 +8,13 @@ class WelcomeScreen extends GetView<ElevatorController> {
   WelcomeScreen({
     Key? key,
     this.title,
-  }) : super(key: key) {
-    for (var i = 0; i < 3; i++) {
-      _textControllers.add(TextEditingController());
-    }
-  }
+  }) : super(key: key);
 
+  /// Input labels.
   final String? title;
 
-  final GlobalKey<FormState> _formKey = GlobalKey();
-
-  final _textControllers = <TextEditingController>[];
-
+  /// InputController class object.
   final InputController inputController = Get.find();
-
-   bool isPublisher = false;
-
-   bool isHaveUser = false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,29 +32,28 @@ class WelcomeScreen extends GetView<ElevatorController> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               InputText(
-                formKeys: _formKey,
-                textControllers: _textControllers,
+                formKeys: inputController.formKey,
+                textControllers: inputController.textControllers,
               ),
               StatusCheck(
                 title: "I'm publisher",
-                onPressed: (check) => isPublisher = check,
+                onPressed: (check) => inputController.publisherSet(check),
               ),
               StatusCheck(
                 title: "I have username-password",
-                onPressed: (check) => isHaveUser = check,
+                onPressed: (check) => print(check),
               ),
             ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.login),
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.orange,
-            onPressed: () {
-              inputController.addedInput(
-                  _textControllers, _formKey, isPublisher, isHaveUser);
-              FocusScope.of(context).unfocus();
-            }),
+          child: Icon(Icons.login),
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.orange,
+          onPressed: () {
+            inputController.addedInput();
+          },
+        ),
       ),
     );
   }

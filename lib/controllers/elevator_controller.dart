@@ -29,9 +29,9 @@ class ElevatorController extends GetxController {
   }
 
   /// Connection Mqtt Server
-  Future<bool> initializedMqtt() async {
+  Future<bool> initializedMqtt() {
     MqttService _mqttService = Get.find();
-    return await _mqttService.initializedMqtt();
+    return _mqttService.initializedMqtt();
   }
 
   /// For publish elevator create.

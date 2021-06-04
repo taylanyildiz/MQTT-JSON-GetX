@@ -1,9 +1,10 @@
 import 'package:ake_elevator_similator/controllers/elevator_controller.dart';
 import 'package:ake_elevator_similator/widgets/animated_list_detail.dart';
+import 'package:ake_elevator_similator/widgets/elevator_console.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ListenDetailScreen extends GetView<ElevatorController> {
+class ListenDetailScreen extends StatelessWidget {
   const ListenDetailScreen({
     Key? key,
     required this.index,
@@ -14,15 +15,16 @@ class ListenDetailScreen extends GetView<ElevatorController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${controller.elevatorListSubscribe[index].id}'),
-        centerTitle: true,
-      ),
-      body: GetBuilder(
-        builder: (ElevatorController _) => Stack(
+    return GetBuilder(
+      builder: (ElevatorController _) => Scaffold(
+        appBar: AppBar(
+          title: Text('${_.elevatorListSubscribe[index].id}'),
+          centerTitle: true,
+        ),
+        body: Stack(
           children: [
             AnimatedListDetail(index: index),
+            ElevatorConsole(),
           ],
         ),
       ),

@@ -28,9 +28,10 @@ class AnimatedListPublish extends GetWidget<AnimationListenerController> {
                   .animate(controller.animationController)
                   .value,
               child: Transform(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.center,
                 transform: Matrix4.identity()
-                  ..scale(1.0, controller.animationController.value),
+                  ..scale(controller.animationController.value,
+                      controller.animationController.value),
                 child: child!,
               ),
             );
