@@ -61,12 +61,13 @@ class MqttService extends GetxService {
       ..keepAlivePeriod = 20
       ..onConnected = _onConnected
       ..onDisconnected = _onDisConnected
-      ..onSubscribed = _onSubscribed;
+      ..onSubscribed = _onSubscribed
+      ..pongCallback = getPong;
 
     final connMessage = MqttConnectMessage()
         // .authenticateAs(username, password)
-        .withWillMessage('willMessage')
-        .withWillTopic('willTopic')
+        .withWillMessage('disconnected')
+        .withWillTopic('publish')
         .startClean()
         .withWillQos(MqttQos.atLeastOnce);
     log('Connecting..');
@@ -105,6 +106,10 @@ class MqttService extends GetxService {
 
   void _onSubscribed(String? topic) {
     log('topic = $topic');
+  }
+
+  void getPong() {
+    print('pong');
   }
 
   void listenMqtt() {
