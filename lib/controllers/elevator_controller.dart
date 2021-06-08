@@ -17,6 +17,12 @@ class ElevatorController extends GetxController {
   /// Create random information data.
   late Random? random;
 
+  /// Current floor.
+  late int currentFloor = 3;
+
+  /// Calling floor.
+  late int callingFloor = 3;
+
   @override
   void onInit() {
     super.onInit();
@@ -45,9 +51,10 @@ class ElevatorController extends GetxController {
 
   void sendElevatorData(int index) async {
     final MqttService _mqttService = Get.find();
+
     while (_mqttService.connectionStatus == MqttConnectionStatus.connected) {
-      elevatorListPublish[index] =
-          getRandomElevator(id: elevatorListPublish[index].id);
+      elevatorListPublish[index] = getRandomElevator(
+          imei: elevatorListPublish[index].imei, floor: callingFloor);
       _mqttService.publishMqtt(elevatorListPublish[index]);
       update();
       await Future.delayed(Duration(seconds: 5));
@@ -55,16 +62,19 @@ class ElevatorController extends GetxController {
   }
 
   /// For subscribe listen server.
-  void listenElevator(String? message) {
+  void listenElevator(String? message, int? messageId) async {
     ElevatorData elevatorData = ElevatorData.fromJson(jsonDecode(message!));
+    callingFloor = elevatorData.floor;
     int index = elevatorListSubscribe
         .indexWhere((element) => element.id == elevatorData.id);
     if (index == -1) {
       elevatorListSubscribe.add(elevatorData);
       update();
+      await Future.delayed(Duration(seconds: 5));
     } else {
       elevatorListSubscribe[index] = elevatorData;
       update([index]);
+      await Future.delayed(Duration(seconds: 5));
     }
   }
 
@@ -76,9 +86,8 @@ class ElevatorController extends GetxController {
     elevatorListPublish.clear();
   }
 
-  void callFloor(int? floor, String? id) {}
-
   ElevatorData getRandomElevator({
+    String? imei,
     String? id,
     int? floor,
     bool? isMove,
@@ -86,7 +95,8 @@ class ElevatorController extends GetxController {
     bool? status,
   }) {
     return ElevatorData(
-      id: id ?? (random!.nextInt(99999) + 10000).toString(),
+      id: id ?? '0',
+      imei: imei ?? (random!.nextInt(99999) + 10000).toString(),
       speed: random!.nextDouble() + random!.nextInt(255) + 100,
       temperature: random!.nextDouble() + random!.nextInt(255) + 100,
       floor: floor ?? 0,

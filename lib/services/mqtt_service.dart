@@ -59,6 +59,7 @@ class MqttService extends GetxService {
       ..logging(on: false)
       ..port = int.parse(MqttConstant.MQTT_PORT_ADRESS)
       ..keepAlivePeriod = 20
+      ..autoReconnect = true
       ..onConnected = _onConnected
       ..onDisconnected = _onDisConnected
       ..onSubscribed = _onSubscribed
@@ -118,7 +119,9 @@ class MqttService extends GetxService {
       MqttPublishMessage recMessage = t[0].payload;
       final message =
           MqttPublishPayload.bytesToStringAsString(recMessage.payload.message!);
-      _elevatorController.listenElevator(message);
+      final messageId = recMessage.variableHeader!.messageIdentifier;
+      print('message id : $messageId -- $message');
+      _elevatorController.listenElevator(message, messageId);
     });
   }
 

@@ -4,6 +4,7 @@ const bool _isMoving = false;
 
 class ElevatorData {
   ElevatorData({
+    required this.imei,
     required this.id,
     required this.speed,
     required this.temperature,
@@ -14,8 +15,13 @@ class ElevatorData {
     required this.dateTime,
   });
 
+  /// Every electronic device use TCP/IP.
+  final String imei;
+
   /// Elevator id.
   /// Every elevator must have different id.
+  /// The sent message id is different from the received message id.
+  /// We use them for controller elevator calling floor.
   final String id;
 
   /// Elevator if it is moving,speed.
@@ -26,7 +32,7 @@ class ElevatorData {
 
   /// Floor information about elevator.
   /// remotely switchable
-  final int floor;
+  int floor;
 
   /// Elevator if it is moving
   ///
@@ -47,47 +53,24 @@ class ElevatorData {
   /// The date the data was sent
   final String dateTime;
 
-  /// If the data does not change, mqtt should not send
-  @override
-  int get hashCode =>
-      id.hashCode ^
-      speed.hashCode ^
-      temperature.hashCode ^
-      floor.hashCode ^
-      isMove.hashCode ^
-      maintenance.hashCode ^
-      status.hashCode ^
-      dateTime.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is ElevatorData) &&
-          id == other.id &&
-          speed == other.speed &&
-          temperature == other.temperature &&
-          floor == other.floor &&
-          isMove == other.isMove &&
-          maintenance == other.maintenance &&
-          status == other.status &&
-          dateTime == other.dateTime;
-
   /// Parse from Json.
   factory ElevatorData.fromJson(Map<String, dynamic> json) {
     return ElevatorData(
-      id: json['id'] as String? ?? '',
+      imei: json['imei'] as String? ?? 'error-imei',
+      id: json['id'] as String? ?? 'error-id',
       speed: json['speed'] as double? ?? 0.0,
       temperature: json['temperature'] as double? ?? 0.0,
       floor: json['floor'] as int? ?? 0,
       isMove: json['isMove'] as bool? ?? false,
       maintenance: json['maintenance'] as bool? ?? false,
       status: json['status'] as bool? ?? false,
-      dateTime: json['dateTime'] as String? ?? DateTime.now().toString(),
+      dateTime: json['dateTime'] as String? ?? 'error-date',
     );
   }
 
   /// To Json Format.
   Map<String, dynamic> toJson() => {
+        'imei': imei,
         'id': id,
         'speed': speed,
         'temperature': temperature,
