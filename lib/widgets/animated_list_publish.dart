@@ -17,7 +17,6 @@ class AnimatedListPublish extends GetWidget<AnimationListenerController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-      id: [_controller.topics],
       builder: (ElevatorController _) {
         controller.createAnimation();
         return AnimatedBuilder(
@@ -55,7 +54,7 @@ class AnimatedListPublish extends GetWidget<AnimationListenerController> {
             child: Column(
               children: [
                 Text(
-                  '${_.elevatorListPublish[index].id}',
+                  '${_.elevatorListPublish[index].floor}',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,

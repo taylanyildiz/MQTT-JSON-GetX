@@ -126,10 +126,12 @@ class MqttService extends GetxService {
   }
 
   void publishMqtt(ElevatorData? elevatorData) {
-    final builder = MqttClientPayloadBuilder();
-    builder.addString(jsonEncode(elevatorData!.toJson()));
-    _client.publishMessage(MqttConstant.MQTT_TOPIC_KEY + elevatorData.id,
-        MqttQos.atLeastOnce, builder.payload!);
-    builder.clear();
+    if (connectionStatus == MqttConnectionStatus.connected) {
+      final builder = MqttClientPayloadBuilder();
+      builder.addString(jsonEncode(elevatorData!.toJson()));
+      _client.publishMessage(MqttConstant.MQTT_TOPIC_KEY + elevatorData.imei,
+          MqttQos.atLeastOnce, builder.payload!);
+      builder.clear();
+    }
   }
 }

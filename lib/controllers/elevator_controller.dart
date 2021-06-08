@@ -18,10 +18,10 @@ class ElevatorController extends GetxController {
   late Random? random;
 
   /// Current floor.
-  late int currentFloor = 3;
+  late int currentFloor = 4;
 
   /// Calling floor.
-  late int callingFloor = 3;
+  late int callingFloor = 4;
 
   @override
   void onInit() {
@@ -51,10 +51,14 @@ class ElevatorController extends GetxController {
 
   void sendElevatorData(int index) async {
     final MqttService _mqttService = Get.find();
-
     while (_mqttService.connectionStatus == MqttConnectionStatus.connected) {
       elevatorListPublish[index] = getRandomElevator(
-          imei: elevatorListPublish[index].imei, floor: callingFloor);
+          imei: elevatorListPublish[index].imei,
+          floor: currentFloor,
+          isMove: currentFloor != callingFloor);
+      if (currentFloor < callingFloor) currentFloor++;
+      if (currentFloor > callingFloor) currentFloor--;
+
       _mqttService.publishMqtt(elevatorListPublish[index]);
       update();
       await Future.delayed(Duration(seconds: 5));
@@ -64,9 +68,14 @@ class ElevatorController extends GetxController {
   /// For subscribe listen server.
   void listenElevator(String? message, int? messageId) async {
     ElevatorData elevatorData = ElevatorData.fromJson(jsonDecode(message!));
-    callingFloor = elevatorData.floor;
+    if (elevatorData.id == '0') {
+      print('listen');
+      callingFloor = elevatorData.floor;
+      update();
+    }
+
     int index = elevatorListSubscribe
-        .indexWhere((element) => element.id == elevatorData.id);
+        .indexWhere((element) => element.imei == elevatorData.imei);
     if (index == -1) {
       elevatorListSubscribe.add(elevatorData);
       update();
@@ -95,7 +104,7 @@ class ElevatorController extends GetxController {
     bool? status,
   }) {
     return ElevatorData(
-      id: id ?? '0',
+      id: id ?? '1',
       imei: imei ?? (random!.nextInt(99999) + 10000).toString(),
       speed: random!.nextDouble() + random!.nextInt(255) + 100,
       temperature: random!.nextDouble() + random!.nextInt(255) + 100,
